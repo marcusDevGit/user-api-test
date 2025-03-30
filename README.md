@@ -93,8 +93,6 @@ Este projeto é uma API RESTful construída com Node.js, Express, Sequelize e Ma
 
 Acesse a API em [http://localhost:3000](http://localhost:3000).
 
-Acesse a API em http://localhost:3000.
-
 🛠️ Endpoints da API
 Usuários
 GET /api/users - Lista todos os usuários
