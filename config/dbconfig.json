@@ -1,0 +1,26 @@
+{
+  "development": {
+    "username": "user",
+    "password": "api-senha1",
+    "database": "database_development",
+    "host": "127.0.0.1",
+    "dialect": "mariadb",
+    "dialectOptions": {
+      "connectTimeout": 30000
+    }
+  },
+  "test": {
+    "username": "root",
+    "password": "api-senha1",
+    "database": "database_test",
+    "host": "mariadb_container",
+    "dialect": "mariadb"
+  },
+  "production": {
+    "username": "root",
+    "password": "api-senha1",
+    "database": "database_production",
+    "host": "mariadb_container",
+    "dialect": "mariadb"
+  }
+}
