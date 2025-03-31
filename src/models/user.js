@@ -1,6 +1,7 @@
 //api-/src/models/user.js
 'use strict';
-import { Model } from 'sequelize';
+import { Model, Op } from 'sequelize';
+
 
 export default (sequelize, DataTypes) => {
   class User extends Model {
@@ -13,7 +14,7 @@ export default (sequelize, DataTypes) => {
       // define association here
 
     }
-    static async seach(query) {
+    static async search(query) {
       const limit = query.limit ? parseInt(query.limit) : 20;
       const offset = query.offset ? parseInt(query.offset) : 0;
       let where = {};
@@ -31,7 +32,7 @@ export default (sequelize, DataTypes) => {
       return {
         entity: entity.rows,
         meta: {
-          caunt: entity.count,
+          count: entity.count,
           limit: limit,
           offset: offset,
         },
