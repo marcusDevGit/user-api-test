@@ -6,15 +6,15 @@ import userController from '../../controllers/userController.js'; // Importa o c
 
 /* GET users listing. */
 //index
-router.get('/', userController.index.bind(userController));
+router.get('/', userController.bindMethod("index"));
 //show
-router.get('/:id', userController.show.bind(userController));
+router.get('/:id', userController.bindMethod("show"));
 //store
-router.post('/', userController.create.bind(userController));
+router.post('/', userController.bindMethod("create"));
 //update
-router.put('/:id', userController.update.bind(userController));
+router.put('/:id', userController.bindMethod("update"));
 //destroy
-router.delete('/:id', userController.destroy.bind(userController));
+router.delete('/:id', userController.bindMethod("destroy"));
 
 
 export default router;
