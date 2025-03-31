@@ -13,6 +13,34 @@ export default (sequelize, DataTypes) => {
       // define association here
 
     }
+    static async seach(query) {
+      const limit = query.limit ? parseInt(query.limit) : 20;
+      const offset = query.offset ? parseInt(query.offset) : 0;
+      let where = {};
+      if (query.name) where.name = {
+        [Op.like]: `%${query.name}%`,
+      }
+      if (query.email) where.email = query.email;
+
+      const entity = await User.findAndCountAll({
+        where,
+        limit: limit,
+        offset: offset,
+        order: [['created_at', 'DESC']],
+      });
+      return {
+        entity: entity.rows,
+        meta: {
+          caunt: entity.count,
+          limit: limit,
+          offset: offset,
+        },
+      };
+    }
+    static async getId(id) {
+
+      return await User.findByPk(id, {});
+    }
   }
   User.init({
     name: {
