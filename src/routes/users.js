@@ -3,6 +3,9 @@ import express from 'express';
 const router = express.Router();
 import userController from '../../controllers/userController.js'; // Importa o controlador de usuários
 
+//Autentication
+//Login
+router.post('/login', userController.bindMethod("login"));
 
 /* GET users listing. */
 //index
