@@ -1,6 +1,10 @@
 //api-/src/models/user.js
 'use strict';
 import { Model, Op } from 'sequelize';
+import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken'
+import 'dotenv/config';
+
 
 
 export default (sequelize, DataTypes) => {
@@ -39,8 +43,43 @@ export default (sequelize, DataTypes) => {
       };
     }
     static async getId(id) {
-
       return await User.findByPk(id, {});
+    }
+    static async verifyLogin(email, password) {
+      try {
+        let user = await User.findOne({
+          where: {
+            email: email
+          },
+        })
+        if (!user) {
+          throw new Error("Email não encontrado")
+        }
+        if (!bcrypt.compareSync(password, user.password)) {
+          throw new Error("Senha incorreta!")
+        }
+
+        let token = jwt.sign({
+          id: user.id
+        }, process.env.SECRET, {
+          expiresIn: '1h'
+        })
+        return {
+          user: user.transform(),
+          token: token
+        }
+      } catch (error) {
+        throw error
+      }
+    }
+    transform() {
+      return {
+        id: this.id,
+        name: this.name,
+        description: this.description,
+        pic: this.pic,
+        email: this.email,
+      }
     }
   }
   User.init({
@@ -80,6 +119,11 @@ export default (sequelize, DataTypes) => {
     sequelize,
     modelName: 'User',
     underscored: true,
+    hooks: {
+      beforeSave: (user, options) => {
+        user.password = bcrypt.hashSync(user.password, 10)
+      }
+    }
   });
   return User;
 };
