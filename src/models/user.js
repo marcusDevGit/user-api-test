@@ -72,14 +72,10 @@ export default (sequelize, DataTypes) => {
         throw error
       }
     }
-    transform() {
-      return {
-        id: this.id,
-        name: this.name,
-        description: this.description,
-        pic: this.pic,
-        email: this.email,
-      }
+    toJSON() {
+      const value = Object.assign({}, this.get());
+      delete value.password
+      return value
     }
   }
   User.init({
