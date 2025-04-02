@@ -1,6 +1,6 @@
 //api-/src/models/user.js
 'use strict';
-import { Model, Op } from 'sequelize';
+import { Error, Model, Op } from 'sequelize';
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import 'dotenv/config';
@@ -55,7 +55,7 @@ export default (sequelize, DataTypes) => {
         if (!user) {
           throw new Error("Email não encontrado")
         }
-        if (!bcrypt.compareSync(password, user.password)) {
+        if (!await bcrypt.compare(password, user.password)) {
           throw new Error("Senha incorreta!")
         }
 
@@ -65,11 +65,23 @@ export default (sequelize, DataTypes) => {
           expiresIn: '1h'
         })
         return {
-          user: user.transform(),
+          user: user,
           token: token
         }
       } catch (error) {
-        throw error
+        console.log("Error na autenticação!", error);
+        throw new Error("Falha ao processaor login")
+      }
+    }
+    //midllewarer
+    static async verifyToken(token) {
+      console.log('Middleware de validação executado, 1');
+      try {
+        const decoded = jwt.verify(token, process.env.SECRET)
+        return decoded;
+      } catch (error) {
+        console.error('Error ao verificar o token', error);
+        throw new Error('token invalido ou expirado')
       }
     }
     toJSON() {
