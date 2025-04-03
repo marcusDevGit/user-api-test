@@ -2,8 +2,11 @@
 import express from 'express';
 const router = express.Router();
 import userController from '../../controllers/userController.js'; // Importa o controlador de usuários
+//midllerware
 import verifyAccessToken from './midlleware/verifyAccessToken.js';
+import verifyOwner from './midlleware/verifyOwner.js';
 
+const onlyAllowOwner = [verifyAccessToken, verifyOwner]
 
 //Autentication
 //Login
@@ -17,9 +20,9 @@ router.get('/:id', verifyAccessToken, userController.bindMethod("show"));
 //store
 router.post('/', userController.bindMethod("create"));
 //update
-router.put('/:id', verifyAccessToken, userController.bindMethod("update"));
+router.put('/:id', onlyAllowOwner, userController.bindMethod("update"));
 //destroy
-router.delete('/:id', verifyAccessToken, userController.bindMethod("destroy"));
+router.delete('/:id', onlyAllowOwner, userController.bindMethod("destroy"));
 
 
 export default router;
